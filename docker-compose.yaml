@@ -52,7 +52,8 @@ services:
       - "3000:3000"
     environment:
       PORT: 3000
-      BACKEND_URL: http://backend:5000
+      # Browser runs on your machine, so it must use localhost — not the Docker service name.
+      BACKEND_URL: http://localhost:5000
     depends_on:
       backend:
         condition: service_healthy

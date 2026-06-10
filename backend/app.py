@@ -33,7 +33,11 @@ def get_mongo_collection():
             "MONGODB_URI is not set. Add your MongoDB connection string to the environment."
         )
 
-    client = MongoClient(mongo_uri)
+    client = MongoClient(
+        mongo_uri,
+        serverSelectionTimeoutMS=10_000,
+        connectTimeoutMS=10_000,
+    )
     database = client[database_name]
     return database[collection_name]
 
@@ -129,6 +133,7 @@ def create_app() -> Flask:
                 201,
             )
         except Exception as error:  # noqa: BLE001
+            app.logger.exception("Submit failed")
             return jsonify({"success": False, "error": str(error)}), 400
 
     @app.get("/api/submissions")
@@ -140,6 +145,7 @@ def create_app() -> Flask:
                 doc["_id"] = str(doc["_id"])
             return jsonify({"submissions": docs, "database": os.getenv("MONGODB_DATABASE", "first_project")}), 200
         except Exception as error:  # noqa: BLE001
+            app.logger.exception("Failed to load submissions")
             return jsonify({"error": str(error)}), 500
 
     @app.get("/api")
