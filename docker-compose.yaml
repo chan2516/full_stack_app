@@ -1,0 +1,67 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: contact-app-mongo
+    profiles: ["local-mongo"]
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME:-your-dockerhub-username}/contact-app-backend:latest
+    container_name: contact-app-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_SECRET_KEY: ${FLASK_SECRET_KEY:-dev-secret-key}
+      MONGODB_URI: ${MONGODB_URI}
+      MONGODB_DATABASE: ${MONGODB_DATABASE:-first_project}
+      MONGODB_COLLECTION: ${MONGODB_COLLECTION:-submissions}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME:-your-dockerhub-username}/contact-app-frontend:latest
+    container_name: contact-app-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      BACKEND_URL: http://backend:5000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
