@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 
+import certifi
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -35,6 +36,7 @@ def get_mongo_collection():
 
     client = MongoClient(
         mongo_uri,
+        tlsCAFile=certifi.where(),
         serverSelectionTimeoutMS=10_000,
         connectTimeoutMS=10_000,
     )
