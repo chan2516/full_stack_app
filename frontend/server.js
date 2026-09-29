@@ -12,7 +12,8 @@ const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 app.use(createProxyMiddleware({ 
   pathFilter: '/api',
   target: BACKEND_URL, 
-  changeOrigin: true 
+  changeOrigin: true,
+  pathRewrite: { '^/api': '/api' }
 }));
 
 app.use(express.static(path.join(__dirname, "public")));
