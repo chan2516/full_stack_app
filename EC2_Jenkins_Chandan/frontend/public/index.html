@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Portal | Express + Flask</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <div class="bg-pattern" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <div>
+            <strong>Contact Portal</strong>
+            <span class="brand-sub">Express Frontend · Flask Backend</span>
+          </div>
+        </div>
+        <div class="status-pill" id="backend-status" title="Backend connection status">
+          <span class="status-dot"></span>
+          <span class="status-text">Checking backend…</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="hero card">
+        <div class="hero-copy">
+          <p class="eyebrow">Assignment 3 · Full Stack</p>
+          <h1>Search records &amp; submit contact data</h1>
+          <p class="lead">
+            This UI is served by <strong>Node.js + Express</strong>. Form submissions and record
+            search are handled by the <strong>Flask API</strong> and stored in MongoDB.
+          </p>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value" id="record-count">—</span>
+            <span class="stat-label">Records loaded</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">/api</span>
+            <span class="stat-label">Flask endpoint</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="card panel">
+          <div class="panel-header">
+            <h2>Search records</h2>
+            <p>Filter the JSON dataset by name, role, or ID.</p>
+          </div>
+
+          <form id="search-form" class="search-form" autocomplete="off">
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input
+                id="search-input"
+                type="text"
+                name="q"
+                placeholder="Search by name, role, or id…"
+              >
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="button" id="clear-search" class="btn btn-ghost">Clear</button>
+          </form>
+
+          <div class="table-wrap">
+            <table id="records-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody id="records-body">
+                <tr>
+                  <td colspan="3" class="table-placeholder">Loading records…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-header">
+            <h2>Submit to MongoDB Atlas</h2>
+            <p>Uses the same database as <code>first_app</code>: <strong>first_project.submissions</strong></p>
+          </div>
+
+          <form id="submit-form" class="submit-form" novalidate>
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" placeholder="Enter your name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Enter your message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+              <span class="btn-label">Submit to Flask API</span>
+              <span class="btn-spinner" hidden aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <div id="form-alert" class="alert" hidden role="alert"></div>
+        </section>
+      </div>
+
+      <section class="card panel submissions-panel">
+        <div class="panel-header panel-header-row">
+          <div>
+            <h2>MongoDB Submissions</h2>
+            <p>Recent entries from <strong>first_project → submissions</strong> (shared with first_app).</p>
+          </div>
+          <button type="button" id="refresh-submissions" class="btn btn-ghost">Refresh</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="submissions-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-body">
+              <tr>
+                <td colspan="3" class="table-placeholder">Loading submissions…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>

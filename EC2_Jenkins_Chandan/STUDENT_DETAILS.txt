@@ -1,0 +1,7 @@
+Student name: Chandan Vishwakarma
+GitHub repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+EC2 frontend URL:
+Jenkins URL:
+Backend pipeline result:
+Frontend pipeline result:
+Result: Pending EC2 and Jenkins deployment screenshots

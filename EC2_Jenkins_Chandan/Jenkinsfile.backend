@@ -1,0 +1,26 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+    stage('Install backend') {
+      steps {
+        sh '''
+          mkdir -p /opt/contact-app/backend
+          cp -R backend/. /opt/contact-app/backend/
+          python3 -m venv /opt/contact-app/backend/venv
+          /opt/contact-app/backend/venv/bin/pip install -r /opt/contact-app/backend/requirements.txt
+        '''
+      }
+    }
+    stage('Test') {
+      steps { sh '/opt/contact-app/backend/venv/bin/python -m py_compile /opt/contact-app/backend/app.py' }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'sudo systemctl restart contact-backend'
+        sh 'sleep 3; curl --fail http://127.0.0.1:5000/health'
+      }
+    }
+  }
+  post { always { cleanWs() } }
+}

@@ -1,0 +1,31 @@
+pipeline {
+  agent any
+  environment { BACKEND_URL = 'http://127.0.0.1:5000' }
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+    stage('Install frontend') {
+      steps {
+        sh '''
+          mkdir -p /opt/contact-app/frontend
+          cp -R frontend/. /opt/contact-app/frontend/
+          cp assignments/activity-3-ec2-jenkins/ecosystem.config.js /opt/contact-app/frontend/ecosystem.config.js
+          cd /opt/contact-app/frontend
+          npm ci --omit=dev
+        '''
+      }
+    }
+    stage('Test') { steps { sh 'node --check /opt/contact-app/frontend/server.js' } }
+    stage('Deploy') {
+      steps {
+        sh '''
+          cd /opt/contact-app/frontend
+          JENKINS_NODE_COOKIE=dontKillMe PORT=3000 BACKEND_URL=$BACKEND_URL pm2 startOrRestart ecosystem.config.js --update-env
+          JENKINS_NODE_COOKIE=dontKillMe pm2 save
+          sleep 3
+          curl --fail http://127.0.0.1:3000/health
+        '''
+      }
+    }
+  }
+  post { always { cleanWs() } }
+}

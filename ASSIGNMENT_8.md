@@ -69,3 +69,21 @@ vpc_id = "vpc-093ecc6ed900cbbe9"
 
 ## Conclusion
 All Terraform resources were successfully provisioned and verified, demonstrating the ability to automate cloud infrastructure in AWS. All resources were destroyed after testing to prevent costs.
+
+---
+
+# Activity 3: EC2 Deployment and Jenkins CI/CD
+
+## Overview
+For this assignment, we successfully set up a full Continuous Integration and Continuous Deployment (CI/CD) pipeline using Jenkins on an AWS EC2 instance (Ubuntu 24.04).
+
+## Configuration Details
+- **Infrastructure:** Provisioned a `t3.small` Ubuntu EC2 instance.
+- **Security:** Configured AWS Security Groups to allow inbound traffic on ports 22 (SSH), 8080 (Jenkins UI and Webhooks), 3000 (Express Frontend), and 5000 (Flask Backend).
+- **Automation:** Created two Jenkins pipelines (`contact-backend` and `contact-frontend`) using Groovy-based `Jenkinsfile`s.
+- **Webhook Integration:** Configured GitHub Webhooks to automatically trigger Jenkins builds upon new code pushes.
+
+## Execution and Resolution
+- Resolved Java version incompatibility by explicitly installing and configuring Java 21 for Jenkins.
+- Resolved Jenkins `EACCES` and Process Tree Killer issues by modifying the `Jenkinsfile` with `JENKINS_NODE_COOKIE=dontKillMe`, allowing the PM2 background daemon to survive post-build.
+- Successfully achieved automated deployment: Pushing a code change to the repository immediately triggered the webhook, executed the pipeline stages (Checkout, Install, Test, Deploy), and automatically restarted the live application.
