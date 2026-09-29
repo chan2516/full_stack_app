@@ -193,7 +193,7 @@ git push -u origin main
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | Health check |
-| GET | `/api/records?q=` | Search JSON records |
+| GET | `/api/records?q=` | Search JSON records  |
 | POST | `/api/submit` | Submit form (JSON body) |
 | GET | `/api` | Raw JSON data |
 
