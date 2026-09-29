@@ -4,8 +4,8 @@ A full-stack contact portal built for Assignment 3. The **Express (Node.js)** fr
 
 ## Features
 
-- Search records from `data.json` (same data as Flask Assignment)
-- Submit contact form to MongoDB via Flask REST API
+- Search records from `data.json` (same data as Flask Assignment 3)
+  - Submit contact form to MongoDB via Flask REST API
 - Separate `frontend/` and `backend/` folders
 - Dockerfiles for both services + `docker-compose.yaml`
 - Health checks and shared Docker network

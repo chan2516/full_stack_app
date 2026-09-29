@@ -1,8 +1,13 @@
 #!/bin/bash
 set -euo pipefail
-dnf install -y git nodejs npm
+apt-get update -y
+export DEBIAN_FRONTEND=noninteractive
+apt-get install -y curl git
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+apt-get install -y nodejs
+
 git clone '${repository_url}' /opt/contact-app
-cd /opt/contact-app/frontend && npm ci --omit=dev
+cd /opt/contact-app/frontend && npm install
 cat >/etc/systemd/system/contact-frontend.service <<'EOF'
 [Unit]
 After=network-online.target

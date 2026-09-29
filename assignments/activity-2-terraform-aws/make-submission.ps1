@@ -11,6 +11,7 @@ Copy-Item "$projectRoot/backend", "$projectRoot/frontend" $stage -Recurse
 Copy-Item "$PSScriptRoot/part-1-single-ec2", "$PSScriptRoot/part-2-separate-ec2", "$PSScriptRoot/part-3-ecs", "$PSScriptRoot/screenshots" $stage -Recurse
 Copy-Item "$PSScriptRoot/README.md", "$PSScriptRoot/STUDENT_DETAILS.txt", "$PSScriptRoot/Terraform_AWS_Deployment_Guide.docx" $stage
 Get-ChildItem $stage -Recurse -Force -File | Where-Object { $_.Name -in @('.env','terraform.tfvars','backend.hcl') -or $_.Name -like '*.tfstate*' } | Remove-Item -Force
+Get-ChildItem $stage -Recurse -Force -Directory | Where-Object { $_.Name -eq '.terraform' } | Remove-Item -Recurse -Force
 if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
 Compress-Archive -Path $stage -DestinationPath $zip
 Write-Host "Created $zip"
