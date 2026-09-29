@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euo pipefail
+dnf update -y
+dnf install -y git python3 python3-pip nodejs npm
+git clone '${repository_url}' /opt/contact-app
+python3 -m venv /opt/contact-app/backend/venv
+/opt/contact-app/backend/venv/bin/pip install -r /opt/contact-app/backend/requirements.txt
+cd /opt/contact-app/frontend && npm ci --omit=dev
+cat >/opt/contact-app/backend/.env <<'EOF'
+MONGODB_URI=${mongodb_uri}
+MONGODB_DATABASE=first_project
+MONGODB_COLLECTION=submissions
+FLASK_SECRET_KEY=terraform-assignment-change-me
+CORS_ORIGINS=*
+EOF
+cat >/etc/systemd/system/contact-backend.service <<'EOF'
+[Unit]
+After=network-online.target
+[Service]
+WorkingDirectory=/opt/contact-app/backend
+EnvironmentFile=/opt/contact-app/backend/.env
+ExecStart=/opt/contact-app/backend/venv/bin/gunicorn --bind 0.0.0.0:5000 app:app
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+cat >/etc/systemd/system/contact-frontend.service <<'EOF'
+[Unit]
+After=network-online.target contact-backend.service
+[Service]
+WorkingDirectory=/opt/contact-app/frontend
+Environment=PORT=3000
+Environment=BACKEND_URL=http://127.0.0.1:5000
+ExecStart=/usr/bin/npm start
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable --now contact-backend contact-frontend

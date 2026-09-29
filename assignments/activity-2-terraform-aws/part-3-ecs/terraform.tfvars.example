@@ -1,0 +1,4 @@
+aws_region         = "ap-south-1"
+mongodb_uri        = "mongodb+srv://USER:PASSWORD@CLUSTER/"
+backend_image_tag  = "latest"
+frontend_image_tag = "latest"

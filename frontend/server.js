@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 3000;
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 
 // Forward all /api requests internally to the backend container
-app.use('/api', createProxyMiddleware({ 
+app.use(createProxyMiddleware({ 
+  pathFilter: '/api',
   target: BACKEND_URL, 
   changeOrigin: true 
 }));

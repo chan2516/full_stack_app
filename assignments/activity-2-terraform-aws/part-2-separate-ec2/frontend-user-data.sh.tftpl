@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+dnf install -y git nodejs npm
+git clone '${repository_url}' /opt/contact-app
+cd /opt/contact-app/frontend && npm ci --omit=dev
+cat >/etc/systemd/system/contact-frontend.service <<'EOF'
+[Unit]
+After=network-online.target
+[Service]
+WorkingDirectory=/opt/contact-app/frontend
+Environment=PORT=3000
+Environment=BACKEND_URL=http://${backend_ip}:5000
+ExecStart=/usr/bin/npm start
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable --now contact-frontend

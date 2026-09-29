@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contact-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contact-frontend
+  template:
+    metadata:
+      labels:
+        app: contact-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: contact-app-frontend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: BACKEND_URL
+              value: http://contact-backend:5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 192Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contact-frontend
+spec:
+  selector:
+    app: contact-frontend
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      nodePort: 30080
+  type: NodePort

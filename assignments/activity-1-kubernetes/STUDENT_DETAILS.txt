@@ -1,0 +1,5 @@
+Student name: Chandan Vishwakarma
+GitHub repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+Deployment date:
+Minikube frontend URL:
+Result: Pending local deployment and screenshots

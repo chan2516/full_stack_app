@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+dnf install -y git python3 python3-pip
+git clone '${repository_url}' /opt/contact-app
+python3 -m venv /opt/contact-app/backend/venv
+/opt/contact-app/backend/venv/bin/pip install -r /opt/contact-app/backend/requirements.txt
+cat >/opt/contact-app/backend/.env <<'EOF'
+MONGODB_URI=${mongodb_uri}
+MONGODB_DATABASE=first_project
+MONGODB_COLLECTION=submissions
+FLASK_SECRET_KEY=terraform-assignment-change-me
+CORS_ORIGINS=*
+EOF
+cat >/etc/systemd/system/contact-backend.service <<'EOF'
+[Unit]
+After=network-online.target
+[Service]
+WorkingDirectory=/opt/contact-app/backend
+EnvironmentFile=/opt/contact-app/backend/.env
+ExecStart=/opt/contact-app/backend/venv/bin/gunicorn --bind 0.0.0.0:5000 app:app
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable --now contact-backend

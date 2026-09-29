@@ -1,0 +1,7 @@
+Student name: Chandan Vishwakarma
+GitHub repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+AWS region: ap-south-1
+Part 1 frontend URL:
+Part 2 frontend URL:
+Part 3 ALB URL:
+Result: Pending AWS deployment and screenshots

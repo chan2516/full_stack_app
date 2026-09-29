@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contact-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contact-backend
+  template:
+    metadata:
+      labels:
+        app: contact-backend
+    spec:
+      containers:
+        - name: backend
+          image: contact-app-backend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: contact-app-config
+            - secretRef:
+                name: contact-app-secrets
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contact-backend
+spec:
+  selector:
+    app: contact-backend
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP

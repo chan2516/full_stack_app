@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: contact-app-config
+data:
+  MONGODB_DATABASE: first_project
+  MONGODB_COLLECTION: submissions
+  CORS_ORIGINS: "*"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: contact-app-secrets
+type: Opaque
+stringData:
+  MONGODB_URI: ""
+  FLASK_SECRET_KEY: change-me-before-form-testing
