@@ -19,8 +19,8 @@ pipeline {
       steps {
         sh '''
           cd /opt/contact-app/frontend
-          PORT=3000 BACKEND_URL=$BACKEND_URL pm2 startOrRestart ecosystem.config.js --update-env
-          pm2 save
+          JENKINS_NODE_COOKIE=dontKillMe PORT=3000 BACKEND_URL=$BACKEND_URL pm2 startOrRestart ecosystem.config.js --update-env
+          JENKINS_NODE_COOKIE=dontKillMe pm2 save
           sleep 3
           curl --fail http://127.0.0.1:3000/health
         '''
