@@ -34,12 +34,15 @@ def get_mongo_collection():
             "MONGODB_URI is not set. Add your MongoDB connection string to the environment."
         )
 
-    client = MongoClient(
-        mongo_uri,
-        tlsCAFile=certifi.where(),
-        serverSelectionTimeoutMS=10_000,
-        connectTimeoutMS=10_000,
-    )
+    client_kwargs = {
+        "serverSelectionTimeoutMS": 10_000,
+        "connectTimeoutMS": 10_000,
+    }
+    
+    if "+srv" in mongo_uri:
+        client_kwargs["tlsCAFile"] = certifi.where()
+
+    client = MongoClient(mongo_uri, **client_kwargs)
     database = client[database_name]
     return database[collection_name]
 
