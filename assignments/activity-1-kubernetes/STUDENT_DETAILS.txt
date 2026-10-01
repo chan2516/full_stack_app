@@ -1,5 +1,5 @@
 Student name: Chandan Vishwakarma
-GitHub repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
-Deployment date:
-Minikube frontend URL:
-Result: Pending local deployment and screenshots
+GitHub repository: https://github.com/chan2516/full_stack_app
+Deployment date: 2026-10-01
+Minikube frontend URL: http://192.168.49.2:30000
+Result: Complete

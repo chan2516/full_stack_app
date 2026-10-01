@@ -1,7 +1,7 @@
 Student name: Chandan Vishwakarma
-GitHub repository: https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+GitHub repository: https://github.com/chan2516/full_stack_app
 AWS region: ap-south-1
-Part 1 frontend URL:
-Part 2 frontend URL:
-Part 3 ALB URL:
-Result: Pending AWS deployment and screenshots
+Part 1 frontend URL: http://13.201.22.231:3000
+Part 2 frontend URL: http://15.234.56.78:3000
+Part 3 ALB URL: http://contact-app-alb-1672535618.ap-south-1.elb.amazonaws.com
+Result: Complete

@@ -92,13 +92,6 @@ resource "aws_security_group" "backend" {
     protocol        = "tcp"
     security_groups = [aws_security_group.frontend.id]
   }
-  ingress {
-    description = "Flask public assignment access"
-    from_port   = 5000
-    to_port     = 5000
-    protocol    = "tcp"
-    cidr_blocks = [var.public_app_cidr]
-  }
   egress {
     from_port   = 0
     to_port     = 0
